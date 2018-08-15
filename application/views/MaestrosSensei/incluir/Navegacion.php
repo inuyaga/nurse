@@ -11,6 +11,7 @@ Tip 2: you can change the color of the active button using the data-active-color
         <div class="logo">
             <a href="#" class="simple-text">
                 Nurse Class
+                <img src="<?=base_url('publico/img/logo.png')?>" alt="" height="80" width="80">
             </a>
         </div>
 
