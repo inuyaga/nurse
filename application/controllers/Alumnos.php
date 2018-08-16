@@ -174,9 +174,9 @@ class Alumnos extends CI_Controller
 
 
                         <th>Tarea</th>
-                        <th>Descripcion</th>
+                        <th>Descripción</th>
                         <th>Entrega</th>
-                        <th>Accion</th>
+                        <th>Acción</th>
                         <th>Faltan</th>
                     </thead>
                     <tbody> ';
@@ -210,7 +210,7 @@ class Alumnos extends CI_Controller
             echo '</td><td>';
 
             if ($this->dateDiff(date("y-m-d"), $key->Tarea_Fecha_fin) >= -0) {
-                echo $this->dateDiff(date('y-m-d'), $key->Tarea_Fecha_fin) . ' Dias';
+                echo $this->dateDiff(date('y-m-d'), $key->Tarea_Fecha_fin) . ' Días';
             }
             echo '</td>';
 
@@ -565,7 +565,7 @@ class Alumnos extends CI_Controller
         <thead>
         <tr>
         <th>Docuemto</th>
-        <th>Descripcion</th>
+        <th>Descripción</th>
         </tr>
         </thead>
 

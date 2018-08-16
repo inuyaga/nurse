@@ -1,9 +1,9 @@
 <?php
 $compara = array(
-  '1' => 'Entregado',
-  '2' => 'Calificado',
+    '1' => 'Entregado',
+    '2' => 'Calificado',
 );
- ?>
+?>
 <div class="col-lg-12 col-md-12">
   <div class="card">
     <div class="header">
@@ -18,31 +18,31 @@ $compara = array(
            <th>Unidad</th>
            <th>Tarea</th>
            <th>Estado</th>
-           <th>Calificacion</th>
+           <th>Calificación</th>
            <th>Comentario Maestro</th>
-           <th>Accion</th>
+           <th>Acción</th>
        </thead>
        <tbody>
            <?php foreach ($TareaEntregadas->result() as $key): ?>
              <tr>
-            <td><?= $key->Materia_Nombre ?></td>
-            <td><?= $key->Unidad_Descripcion ?></td>
-            <td><?= $key->Tarea_Descripcion ?></td>
-            <td><?= $compara[$key->Archi_Status] ?></td>
-            <td><?= $key->Archi_Calificacion ?></td>
-            <td><?= $key->Archi_Comentario_Maestro ?></td>
+            <td><?=$key->Materia_Nombre?></td>
+            <td><?=$key->Unidad_Descripcion?></td>
+            <td><?=$key->Tarea_Descripcion?></td>
+            <td><?=$compara[$key->Archi_Status]?></td>
+            <td><?=$key->Archi_Calificacion?></td>
+            <td><?=$key->Archi_Comentario_Maestro?></td>
             <?php if ($key->Archi_Calificacion > 0): ?>
               <?php else: ?>
                 <td>
-                  <button class="btn btn-danger btn-sm" onclick="alerta(<?= $key->Archi_ID ?>, '<?= $key->Archi_ID ?>')">Eliminar</button>
-                  
+                  <button class="btn btn-danger btn-sm" onclick="alerta(<?=$key->Archi_ID?>, '<?=$key->Archi_ID?>')">Eliminar</button>
+
               </td>
-            <?php endif; ?>
+            <?php endif;?>
             <td>
-            <a href="<?= base_url('Alumnos/VerDocumento/').$key->Archi_ID ?>" class="btn btn-success btn-sm">Ver</a>
+            <a href="<?=base_url('Alumnos/VerDocumento/') . $key->Archi_ID?>" class="btn btn-success btn-sm">Ver</a>
             </td>
              </tr>
-           <?php endforeach; ?>
+           <?php endforeach;?>
 
        </tbody>
    </table>
@@ -64,7 +64,7 @@ $compara = array(
     function(){
       alertify.success('Si');
 
-     $.post("<?= base_url('Alumnos/EliminaTareaAlumno') ?>",
+     $.post("<?=base_url('Alumnos/EliminaTareaAlumno')?>",
       {
         IDTarea: id,
         RUTA: ruta,

@@ -73,7 +73,7 @@
               required></textarea>
           </div>
 
-          <div class="input-field col s2 ">
+          <div class="input-field col s2 hide">
             <label for="first_name">TareaID</label>
             <input placeholder="" id="TareaID" type="text" class="validate" name="TareaID" required>
 

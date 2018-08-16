@@ -14,18 +14,18 @@
                 <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                </div>
               <div class="card-body">
-                <h5 class="card-title">Materia: <?= $key->Materia_Nombre ?></h5>
-                <h6 class="card-title">Maestro: <?= $key->NombreMaestro ?></h6>
-                <h6 class="card-title">Aula: <?= $key->Grup_Nombre ?></h6>
+                <h5 class="card-title">Materia: <?=$key->Materia_Nombre?></h5>
+                <h6 class="card-title">Maestro: <?=$key->NombreMaestro?></h6>
+                <h6 class="card-title">Aula: <?=$key->Grup_Nombre?></h6>
 
                 <p class="card-text"> </p>
-                <a class="btn btn-success"  href="<?= base_url('Alumnos/TareasEntregadasMateriaUnidad/').$key->Materia_ID ?>">Entar</a>
+                <a class="btn btn-success"  href="<?=base_url('Alumnos/TareasEntregadasMateriaUnidad/') . $key->Materia_ID?>">Entrar</a>
               </div>
 
             </div>
           </div>
-        <?php endforeach; ?>
-      <?php endif; ?>
+        <?php endforeach;?>
+      <?php endif;?>
 
       <div class="clearfix"></div>
 

@@ -93,7 +93,7 @@ foreach ($MisMaterias->result() as $key) {?>
                 </div>
                 <div class="col-xs-7">
                     <div class="numbers">
-                        <p>Calificacion</p>
+                        <p>Calificación</p>
                         <?=$this->M_Sensei->getCalificacionAlumno($key->Materia_ID, $this->session->ID_Usuario);?>
                     </div>
                 </div>
@@ -118,7 +118,7 @@ foreach ($MisMaterias->result() as $key) {?>
 <div class="col-lg-12 col-md-12">
     <div class="card">
         <div class="header">
-            <h4 class="title">Tareas proximas a entregar</h4>
+            <h4 class="title">Tareas Próximas a entregar</h4>
         </div>
         <div class="content">
 
@@ -132,9 +132,9 @@ foreach ($MisMaterias->result() as $key) {?>
                         <th>Materia</th>
                         <th>Unidad</th>
                         <th>Tarea</th>
-                        <th>Descripcion</th>
+                        <th>Descripción</th>
                         <th>Entrega</th>
-                        <th>Accion</th>
+                        <th>Acción</th>
                         <th>Faltan</th>
                     </thead>
                     <tbody>
@@ -171,7 +171,7 @@ foreach ($MisMaterias->result() as $key) {?>
                                     <i class="ti-file"></i> Crear documento</a>
                             </td>
                             <td>
-                                <?=dateDiff(date('y-m-d'), $key->Tarea_Fecha_fin)?> Dias</td>
+                                <?=dateDiff(date('y-m-d'), $key->Tarea_Fecha_fin)?> Días</td>
 
                         </tr>
                         <?php endif;?>
