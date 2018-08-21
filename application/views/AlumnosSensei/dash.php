@@ -1,28 +1,112 @@
 <?php
 
 foreach ($MisMaterias->result() as $key) {?>
-<div class="col-lg-3 col-sm-6">
-    <div class="card">
-        <div class="content">
-            <div class="row">
-                <div class="col-xs-5">
-                    <div class="icon-big icon-warning text-center">
-                        <i class="ti-book"></i>
+<div class="row">
+    <div class="col-lg-3 col-sm-6">
+        <div class="card">
+            <div class="content">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="icon-big icon-warning text-center">
+                            <i class="ti-book"></i>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-7">
-                    <div class="numbers">
-                        <strong><p>Materia</p></strong>
-                        <p><?=$key->Materia_Nombre?></p>
+                    <div class="col-xs-7">
+                        <div class="numbers">
+                            <strong><p>Materia</p></strong>
+                            <p>
+                                <?=$key->Materia_Nombre?>
+                            </p>
 
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <hr />
+                    <div class="stats">
+                        <i class="ti-reload"></i>
+                        <?=$key->Materia_Nombre?>
                     </div>
                 </div>
             </div>
-            <div class="footer">
-                <hr />
-                <div class="stats">
-                    <i class="ti-reload"></i>
-                    <?=$key->Materia_Nombre?>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3 col-sm-6">
+        <div class="card">
+            <div class="content">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="icon-big icon-info text-center">
+                            <i class="ti-list"></i>
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="numbers">
+                            <p>Unidades</p>
+                            <?=$this->M_Sensei->getUnidades($key->Materia_ID)->num_rows();?>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <hr />
+                    <div class="stats">
+                        <i class="ti-reload"></i>
+                        <?=$key->Materia_Nombre?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card">
+            <div class="content">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="icon-big icon-success text-center">
+                            <i class="ti-write"></i>
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="numbers">
+                            <p>Tareas</p>
+                            <?=$this->M_Sensei->getTareasDeMateria($key->Materia_ID)->num_rows();?>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <hr />
+                    <div class="stats">
+                        <i class="ti-reload"></i>
+                        <?=$key->Materia_Nombre?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card">
+            <div class="content">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="icon-big icon-danger text-center">
+                            <i class="ti-gift"></i>
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="numbers">
+                            <p>Calificación</p>
+                            <?=$this->M_Sensei->getCalificacionAlumno($key->Materia_ID, $this->session->ID_Usuario);?>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <hr />
+                    <div class="stats">
+                        <i class="ti-reload"></i>
+                        <?=$key->Materia_Nombre?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,84 +114,6 @@ foreach ($MisMaterias->result() as $key) {?>
 </div>
 
 
-<div class="col-lg-3 col-sm-6">
-    <div class="card">
-        <div class="content">
-            <div class="row">
-                <div class="col-xs-5">
-                    <div class="icon-big icon-info text-center">
-                        <i class="ti-list"></i>
-                    </div>
-                </div>
-                <div class="col-xs-7">
-                    <div class="numbers">
-                        <p>Unidades</p>
-                        <?=$this->M_Sensei->getUnidades($key->Materia_ID)->num_rows();?>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">
-                <hr />
-                <div class="stats">
-                    <i class="ti-reload"></i>
-                    <?=$key->Materia_Nombre?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-3 col-sm-6">
-    <div class="card">
-        <div class="content">
-            <div class="row">
-                <div class="col-xs-5">
-                    <div class="icon-big icon-success text-center">
-                        <i class="ti-write"></i>
-                    </div>
-                </div>
-                <div class="col-xs-7">
-                    <div class="numbers">
-                        <p>Tareas</p>
-                        <?=$this->M_Sensei->getTareasDeMateria($key->Materia_ID)->num_rows();?>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">
-                <hr />
-                <div class="stats">
-                    <i class="ti-reload"></i>
-                    <?=$key->Materia_Nombre?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-3 col-sm-6">
-    <div class="card">
-        <div class="content">
-            <div class="row">
-                <div class="col-xs-5">
-                    <div class="icon-big icon-danger text-center">
-                        <i class="ti-gift"></i>
-                    </div>
-                </div>
-                <div class="col-xs-7">
-                    <div class="numbers">
-                        <p>Calificación</p>
-                        <?=$this->M_Sensei->getCalificacionAlumno($key->Materia_ID, $this->session->ID_Usuario);?>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">
-                <hr />
-                <div class="stats">
-                    <i class="ti-reload"></i>
-                    <?=$key->Materia_Nombre?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <?php }?>
 
 
@@ -171,7 +177,8 @@ foreach ($MisMaterias->result() as $key) {?>
                                     <i class="ti-file"></i> Crear documento</a>
                             </td>
                             <td>
-                                <?=dateDiff(date('y-m-d'), $key->Tarea_Fecha_fin)?> Días</td>
+                                <?=dateDiff(date('y-m-d'), $key->Tarea_Fecha_fin)?> Días
+                            </td>
 
                         </tr>
                         <?php endif;?>
