@@ -10,11 +10,9 @@ foreach ($Tarea->result() as $key) {
       <input type="text" name="retorno" value="<?= uri_string() ?>">
       </form>
       
-   <?php }else{ ?>
-    
-        <iframe src="<?= $key->Archi_Ruta ?>" width="100%" height="100%"></iframe> 
-    
-    <?php }
+   <?php }else{
+    redirect($key->Archi_Ruta,'refresh'); 
+     }
     } ?>
 <script type="text/javascript">
    CKEDITOR.on('instanceReady',

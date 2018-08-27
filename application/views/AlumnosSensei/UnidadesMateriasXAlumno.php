@@ -39,7 +39,7 @@ $compara = array(
               </td>
             <?php endif;?>
             <td>
-            <a href="<?=base_url('Alumnos/VerDocumento/') . $key->Archi_ID?>" class="btn btn-success btn-sm">Ver</a>
+            <a href="<?=base_url('Alumnos/VerDocumento/') . $key->Archi_ID?>"  class="btn btn-success btn-sm">Ver</a>
             </td>
              </tr>
            <?php endforeach;?>

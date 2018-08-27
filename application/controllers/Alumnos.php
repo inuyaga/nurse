@@ -187,25 +187,26 @@ class Alumnos extends CI_Controller
                   <td>' . $key->Tarea_Nombre . '</td>
                   <td>' . $key->Tarea_Descripcion . '</td>
                   <td>' . $key->Tarea_Fecha_fin . '</td>
-                  <td>';
+                  <td>'; 
 
-            if ($this->dateDiff(date("y-m-d"), $key->Tarea_Fecha_fin) >= -0) {
+            
 
-                if ($this->M_Sensei->getTareaHechaPorElAlumno($key->Tarea_ID) == 0) {
-                    echo '
-                    <button type="button" class="btn btn-success btn-fill btn-wd" data-toggle="modal" data-target="#EntregarTarea" data-backdrop="false"
-                    onclick="pasarInfo(' . $key->Tarea_ID . ')">
-                    <i class="ti-google"></i>
-                    Google Drive
-                    </button>
 
-                    <a class="btn btn-success" type="button" class="btn btn-primary" href="' . base_url('Alumnos/NuevoDoc/' . $key->Tarea_ID) . '"><i class="ti-file"></i> Crear documento</a>
-                    ';
-                } else {
+            if ($this->M_Sensei->getTareaHechaPorElAlumno($key->Tarea_ID) == 0) {
+                echo '
+                <button type="button" class="btn btn-success btn-fill btn-wd" data-toggle="modal" data-target="#EntregarTarea" data-backdrop="false"
+                onclick="pasarInfo(' . $key->Tarea_ID . ')">
+                <i class="ti-google"></i>
+                Google Drive
+                </button>
 
-                    echo '<h5>' . $status[$this->M_Sensei->getStatusTarea($key->Tarea_ID)] . '</h5>';
-                }
-            } else {echo 'No entregado';}
+                <a class="btn btn-success" type="button" class="btn btn-primary" href="' . base_url('Alumnos/NuevoDoc/' . $key->Tarea_ID) . '"><i class="ti-file"></i> Crear documento</a>
+                ';
+            } else {
+
+                if ($this->dateDiff(date("y-m-d"), $key->Tarea_Fecha_fin) >= -0) {echo 'No entregado';}
+                echo '<h5>' . $status[$this->M_Sensei->getStatusTarea($key->Tarea_ID)] . '</h5>';
+            }
 
             echo '</td><td>';
 
@@ -472,7 +473,7 @@ class Alumnos extends CI_Controller
 
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 2) {
-                $indicador['active'] = 4;
+                $indicador['active'] = 4; 
 
                 $dato['TareaEntregadas'] = $this->M_Sensei->TareasEntregadasFiltradas($IdAlumno, $IdMateria, $IdUnidad);
                 $dato['MisMaterias'] = $this->M_Sensei->MisMateria();

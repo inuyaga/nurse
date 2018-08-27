@@ -142,7 +142,7 @@ function dateDiff($start, $end)
         IDUnidad: $(this).val()
       },
       function (data, status) {
-        $('#TablaTareas').html(data);
+        $('#TablaTareas').html(data); 
       });
 
   });
