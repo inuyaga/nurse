@@ -149,12 +149,10 @@ class Alumnos extends CI_Controller
            <option value="' . $key->Unidades_ID . '" >' . $key->Unidad_Descripcion . '</option>
            ';
         }
-
     }
 
     public function getTareasPorHacer()
     {
-
         $status = array('1' => 'Entregado', '2' => 'Calificado');
         $query = $this->M_Sensei->getTareasParaAlumno($this->input->post('IDUnidad'));
         echo '
@@ -187,24 +185,27 @@ class Alumnos extends CI_Controller
                   <td>' . $key->Tarea_Nombre . '</td>
                   <td>' . $key->Tarea_Descripcion . '</td>
                   <td>' . $key->Tarea_Fecha_fin . '</td>
-                  <td>'; 
+                  <td>';
 
             
 
 
             if ($this->M_Sensei->getTareaHechaPorElAlumno($key->Tarea_ID) == 0) {
-                echo '
-                <button type="button" class="btn btn-success btn-fill btn-wd" data-toggle="modal" data-target="#EntregarTarea" data-backdrop="false"
-                onclick="pasarInfo(' . $key->Tarea_ID . ')">
-                <i class="ti-google"></i>
-                Google Drive
-                </button>
-
-                <a class="btn btn-success" type="button" class="btn btn-primary" href="' . base_url('Alumnos/NuevoDoc/' . $key->Tarea_ID) . '"><i class="ti-file"></i> Crear documento</a>
-                ';
+                if ($this->dateDiff(date("y-m-d"), $key->Tarea_Fecha_fin) >= -0) {
+                    echo '
+                    <button type="button" class="btn btn-success btn-fill btn-wd" data-toggle="modal" data-target="#EntregarTarea" data-backdrop="false"
+                    onclick="pasarInfo(' . $key->Tarea_ID . ')">
+                    <i class="ti-google"></i>
+                    Google Drive
+                    </button>
+    
+                    <a class="btn btn-success" type="button" class="btn btn-primary" href="' . base_url('Alumnos/NuevoDoc/' . $key->Tarea_ID) . '"><i class="ti-file"></i> Crear documento</a>
+                    ';
+                }
             } else {
-
-                if ($this->dateDiff(date("y-m-d"), $key->Tarea_Fecha_fin) >= -0) {echo 'No entregado';}
+                if ($this->dateDiff(date("y-m-d"), $key->Tarea_Fecha_fin) >= -0) {
+                    echo 'No entregado';
+                }
                 echo '<h5>' . $status[$this->M_Sensei->getStatusTarea($key->Tarea_ID)] . '</h5>';
             }
 
@@ -217,7 +218,6 @@ class Alumnos extends CI_Controller
 
             echo '</td>';
             echo '</tr>';
-
         }
 
         echo '</tbody>
@@ -233,12 +233,10 @@ class Alumnos extends CI_Controller
   </div>
 </div>
         ';
-
     }
 
     public function dateDiff($start, $end)
     {
-
         $start_ts = strtotime($start);
 
         $end_ts = strtotime($end);
@@ -246,7 +244,6 @@ class Alumnos extends CI_Controller
         $diff = $end_ts - $start_ts;
 
         return round($diff / 86400);
-
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -256,7 +253,6 @@ class Alumnos extends CI_Controller
         $data['TareaID'] = $TareaID;
         $this->load->view('AlumnosSensei/incluir/head');
         $this->load->view('AlumnosSensei/NuevoDoc', $data);
-
     }
 
     /*public function GuardarTarea()
@@ -308,10 +304,8 @@ class Alumnos extends CI_Controller
     }*/
     public function GuardarTarea()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 2) {
-
                 $UserID = $this->session->ID_Usuario;
                 $data = array(
                     'Archi_Ruta' => $this->input->post('ContenidoTarea'),
@@ -324,7 +318,6 @@ class Alumnos extends CI_Controller
                 $this->session->set_flashdata('mensaje', 'Tarea entregada');
                 $this->M_Sensei->GuardaArchivosTareas($data);
                 redirect('Alumnos/Tareas', 'refresh');
-
             } else {
                 redirect('Bienvenido');
             }
@@ -338,7 +331,6 @@ class Alumnos extends CI_Controller
         $data['Tarea'] = $this->M_Sensei->getTarea($idTarea);
 
         $this->load->view('VerDocumento', $data);
-
     }
 
     public function MisMaterias()
@@ -443,7 +435,6 @@ class Alumnos extends CI_Controller
 
     public function GuardaUnionAgrupo()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 2) {
                 $dato = array(
@@ -470,10 +461,9 @@ class Alumnos extends CI_Controller
 
     public function TareasEntregadasAlumno($IdAlumno, $IdMateria, $IdUnidad)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 2) {
-                $indicador['active'] = 4; 
+                $indicador['active'] = 4;
 
                 $dato['TareaEntregadas'] = $this->M_Sensei->TareasEntregadasFiltradas($IdAlumno, $IdMateria, $IdUnidad);
                 $dato['MisMaterias'] = $this->M_Sensei->MisMateria();
@@ -526,7 +516,6 @@ class Alumnos extends CI_Controller
                     $this->session->Correo = $correo;
                     redirect('Alumnos/Perfil', 'refresh');
                 }
-
             } else {
                 redirect('Bienvenido');
             }
