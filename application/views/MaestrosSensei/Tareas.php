@@ -123,6 +123,20 @@
               </div>
             </div>
 
+            <div class="col-md-6">
+              <div class="form-group">
+               
+              
+
+              <div class="radio">
+                <label><input type="radio" name="entregable" value="1" checked>Para entrega</label>
+              </div>
+              <div class="radio">
+                <label><input type="radio" name="entregable" value="2">Solo calificar</label>
+              </div>
+            </div>
+            </div>
+
             <div class="col-md-12">
               <div class="form-group">
                 <button type="submit" class="btn btn-success">Crear</button>
@@ -215,7 +229,7 @@
       fechaInicio: { required: true, date: true },
       fechaFinal: { required: true, date: true },
       valor: { required: true, number: true },
-
+      entregable: { required: true},
       UnidadesID: { required: true },
 
 
@@ -226,6 +240,7 @@
       fechaInicio: "Debe introducir una fecha inicial.",
       fechaFinal: "Debe introducir una fecha final.",
       valor: "Debe de escribir numeros enteros sin %",
+      entregable: "Selecciona un valor",
 
     },
     submitHandler: function (form) {
@@ -237,7 +252,8 @@
           UnidadesID: $('#ID_Unidad').val(),
           fechaInicio: $('#TFechaInicio').val(),
           fechaFinal: $('#TFechaFinal').val(),
-          valor: $('#valor').val()
+          valor: $('#valor').val(),
+          entregable: $('input:radio[name=entregable]:checked').val() 
         },
         function (data, status) {
           // $('#Tabla').html(data);

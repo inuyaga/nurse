@@ -73,7 +73,6 @@ class Maestros extends CI_Controller
             $this->session->set_flashdata('error', 'Esta aula tiene una materia asignada debe eliminar la materias relacionada al aula: <strong>' . str_replace('%20', ' ', $nombre) . '</strong> Antes de eliminarla');
 
             redirect('Maestros/CreaGrupos', 'refresh');
-
         } else {
             $this->load->view('MaestrosSensei/incluir/head');
             echo '<div class="alert alert-danger" role="alert">
@@ -81,7 +80,6 @@ class Maestros extends CI_Controller
             </div>';
             $this->load->view('MaestrosSensei/incluir/script');
         }
-
     }
 
     public function CreaMaterias()
@@ -110,10 +108,8 @@ class Maestros extends CI_Controller
 
     public function InformacionEliminaMateria($idMateria)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $this->load->view('MaestrosSensei/incluir/head');
                 echo '<div class="container"><div class="alert alert-info" role="alert">
             La siguiente materia con id: <strong>' . $idMateria . '</strong> se eliminara tenga en cuenta que
@@ -124,20 +120,16 @@ class Maestros extends CI_Controller
         </div></div>
         ';
                 $this->load->view('MaestrosSensei/incluir/script');
-
             } else {
                 redirect('Bienvenido');
             }
-
         } else {
             redirect('Bienvenido');
         }
-
     }
 
     public function EliminaMateria($idMateria)
     {
-
         $grupo = $this->M_Sensei->getGrupoID($idMateria);
         foreach ($grupo->result() as $key) {
             $this->M_Sensei->setStadoGrupo($key->Materia_Grupo_ID);
@@ -145,7 +137,6 @@ class Maestros extends CI_Controller
         $this->M_Sensei->EliminarMateriaMaestro($idMateria);
 
         redirect('Maestros/CreaMaterias', 'refresh');
-
     }
 
     public function GuardaGrupo()
@@ -352,12 +343,10 @@ class Maestros extends CI_Controller
         echo '
         </ul>
         ';
-
     }
 
     public function GuardaMaterias()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $materia = array(
@@ -374,14 +363,12 @@ class Maestros extends CI_Controller
         } else {
             redirect('Bienvenido');
         }
-
     }
 
     public function GuardaUnidades()
     {
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $ID_Materia = $this->input->post('ID');
                 $descrip = $this->input->post('descrip');
 
@@ -391,7 +378,6 @@ class Maestros extends CI_Controller
                 );
                 $this->M_Sensei->GuardarUnidad($datos);
                 echo 'OK';
-
             } else {
                 redirect('Bienvenido');
             }
@@ -408,6 +394,7 @@ class Maestros extends CI_Controller
         $FechaInicio = $this->input->post('fechaInicio');
         $FechaFinal = $this->input->post('fechaFinal');
         $valor = $this->input->post('valor');
+        $entregable = $this->input->post('entregable');
 
         $Tareas = array(
             'Tarea_Nombre' => $nombre,
@@ -424,13 +411,28 @@ class Maestros extends CI_Controller
 
             if ($res > 0) {
                 echo "Tarea creada correctamente";
+                switch ($entregable) {
+                    case 2:
+                   $query= $this->M_Sensei->alumnosregistrosporunidad($UnidadID);
+                   
+                   foreach ($query->result() as $key) {
+                    $datosporAlumno = array(
+                        'Archi_PerteneceID' => $key->Resgistro_AlumnoID, 
+                        'Archi_Status' => '1', 
+                        'Archi_TareaID' => $res, 
+                        'Archi_Tipo' => 0, 
+                     );
+                     $this->M_Sensei->crearTarea($datosporAlumno);
+                   }
+
+                        break;
+                }
             } else {
                 echo "No se creo esta tarea vuelve a pulsar guardar";
             }
         } else {
             echo "La suma de todas las tareas no debe sobrepasar los 100%";
         }
-
     }
 
     public function Tareas()
@@ -510,7 +512,6 @@ class Maestros extends CI_Controller
             </table>
 
             ';
-
     }
 
     public function eliminaTarea()
@@ -567,7 +568,6 @@ class Maestros extends CI_Controller
     {
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $nombre = $this->input->post('nombre');
                 $correo = $this->input->post('email');
                 $msn_p = $this->input->post('msn_perfil');
@@ -603,7 +603,6 @@ class Maestros extends CI_Controller
                     $this->session->Usuario_Mensaje = $msn_p;
                     redirect('Maestros/PerfilUsuario', 'refresh');
                 }
-
             } else {
                 redirect('Bienvenido');
             }
@@ -616,7 +615,6 @@ class Maestros extends CI_Controller
     {
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $indicador['active'] = 6;
 
                 $config['base_url'] = base_url() . 'Maestros/Blog/';
@@ -674,10 +672,8 @@ class Maestros extends CI_Controller
 
     public function RevisionTareas()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $dato['Grupos'] = $this->M_Sensei->Grupos();
 
                 $indicador['active'] = 7;
@@ -701,7 +697,6 @@ class Maestros extends CI_Controller
 
     public function TareasRevisadas()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $dato['Grupos'] = $this->M_Sensei->Grupos();
@@ -725,7 +720,6 @@ class Maestros extends CI_Controller
 
     public function getMaterias()
     {
-
         $resultado = $this->M_Sensei->getMaterias($this->input->post('IDGrupo'));
         echo '<option value="" disabled selected>Elija una opcion</option>';
         foreach ($resultado->result() as $key) {
@@ -733,12 +727,10 @@ class Maestros extends CI_Controller
               <option value="' . $key->Materia_ID . '">' . $key->Materia_Nombre . '</option>
               ';
         }
-
     }
 
     public function getUnidad()
     {
-
         $resultado = $this->M_Sensei->getUnidades($this->input->post('IDMateria'));
         echo '<option value="" disabled selected>Elija una opcion</option>';
         foreach ($resultado->result() as $key) {
@@ -908,7 +900,6 @@ class Maestros extends CI_Controller
         </tbody>
         </table>
         ';
-
     }
     public function getTareasHechasPorCalificar()
     {
@@ -949,12 +940,10 @@ class Maestros extends CI_Controller
         </tbody>
         </table>
         ';
-
     }
 
     public function setCalificacion()
     {
-
         $datos = array(
             'Archi_Comentario_Maestro' => $this->input->post('Comentario'),
             'Archi_Status' => '2',
@@ -963,12 +952,10 @@ class Maestros extends CI_Controller
         );
 
         $this->M_Sensei->CalificaTarea($datos, $this->input->post('IDArchivo'));
-
     }
 
     public function RevisionTareaUnidad($IDmateria, $IDUniad)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $dato['TareasArchivos'] = $this->M_Sensei->TareasXUnidadesFiltrados($IDmateria, $IDUniad);
@@ -997,12 +984,10 @@ class Maestros extends CI_Controller
         $dato['ID'] = $IDTarea;
         $dato['Tarea'] = $this->M_Sensei->getTarea($IDTarea);
         $this->load->view('MaestrosSensei/VerDocumento', $dato);
-
     }
 
     public function TareasRevisadasUnidad($IDmateria, $IDUniad)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $dato['TareasArchivos'] = $this->M_Sensei->TareasXUnidadesFiltrados2($IDmateria, $IDUniad);
@@ -1028,7 +1013,6 @@ class Maestros extends CI_Controller
 
     public function CalificarTarea()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $IdArchivo = $this->input->post('IDArchivo');
@@ -1062,7 +1046,6 @@ class Maestros extends CI_Controller
 
     public function RevisionTareasXalumnos($idMateria)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $dato['ListaAlumnos'] = $this->M_Sensei->ListaAlumnos($idMateria);
@@ -1088,7 +1071,6 @@ class Maestros extends CI_Controller
 
     public function RevisionTareasAlumnos($idAlumno, $idMateria)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $dato['UnidadMateria'] = $this->M_Sensei->UnidadesFiltrada($idMateria);
@@ -1126,7 +1108,6 @@ class Maestros extends CI_Controller
 
     public function UnidadesMateriasXAlumno($idAlumno, $idMateria, $unidad)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $dato['IDAlumno'] = $idAlumno;
@@ -1160,22 +1141,18 @@ class Maestros extends CI_Controller
         $dato['Tarea'] = $this->M_Sensei->getTarea($idTarea);
         $dato['ID'] = $idTarea;
         $this->load->view('MaestrosSensei/VerDocumento', $dato);
-
     }
 
     public function GuardaCambios($ID_Tarea)
     {
-
         $enviar = array('Archi_Ruta' => $this->input->post('tarea'));
 
         $this->M_Sensei->setEdicionDocumento($ID_Tarea, $enviar);
         redirect($this->input->post('retorno'), 'refresh');
-
     }
 
     public function BlogMas($idBlog)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $data['Blogs'] = $this->M_Sensei->ConsultaBlogFiltrado($idBlog);
@@ -1203,7 +1180,6 @@ class Maestros extends CI_Controller
     //PROCESOS REFERENTES AL PROMEDIAR LOS ALUMNOS
     public function Promediar()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $dato['Grupos'] = $this->M_Sensei->Grupos();
@@ -1231,7 +1207,6 @@ class Maestros extends CI_Controller
         foreach ($qery->result() as $key) {
             echo '<option value="' . $key->Usuario_ID . '">' . $key->Usuario_Nombre . '</option>';
         }
-
     }
 
     public function getDatosMateria(Type $var = null)
@@ -1484,7 +1459,6 @@ class Maestros extends CI_Controller
         $suma = 0;
         $bandera = '';
         foreach ($historial->result() as $archivo) {
-
             if ($bandera != $archivo->Unidades_ID && $suma != 0) {
                 echo '
                     <tr>
@@ -1563,16 +1537,14 @@ class Maestros extends CI_Controller
     {
         $this->load->library('Pdf');
         $this->load->view('MaestrosSensei/impresionPDF');
-
     }
 
-///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
     public function chat()
     {
         $this->load->view('MaestrosSensei/incluir/head');
         $this->load->view('chat');
-
     }
     public function GuardaComentarioBlog()
     {
@@ -1595,10 +1567,8 @@ class Maestros extends CI_Controller
 
     public function BlogEditar($idBlog)
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $data['Blogs'] = $this->M_Sensei->ConsultaBlogFiltrado($idBlog);
                 $data['Materias'] = $this->M_Sensei->Materias();
                 $data['IdBlog'] = $idBlog;
@@ -1622,10 +1592,8 @@ class Maestros extends CI_Controller
 
     public function BlogActualiza()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $nombre = $this->input->post('Nombre');
                 $idateria = $this->input->post('IDMateria');
                 $contenido = $this->input->post('blog');
@@ -1652,12 +1620,10 @@ class Maestros extends CI_Controller
         } else {
             redirect('Bienvenido');
         }
-
     }
 
     public function BlogEntradas()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
                 $data['Materias'] = $this->M_Sensei->Materias();
@@ -1671,7 +1637,6 @@ class Maestros extends CI_Controller
                 $this->load->view('MaestrosSensei/incluir/Nab', $datoNab);
                 $this->load->view('MaestrosSensei/BlogEntradas', $data);
                 $this->load->view('MaestrosSensei/incluir/script');
-
             } else {
                 redirect('Bienvenido');
             }
@@ -1682,10 +1647,8 @@ class Maestros extends CI_Controller
 
     public function GuardaBlogEntradas()
     {
-
         if (isset($_SESSION['activo']) && $_SESSION['activo']) {
             if ($_SESSION['Tipo'] == 1) {
-
                 $nombre = $this->input->post('Nombre');
                 $idateria = $this->input->post('IDMateria');
                 $contenido = $this->input->post('blog');
@@ -1706,14 +1669,12 @@ class Maestros extends CI_Controller
                 $this->M_Sensei->GuardaBlog($data);
 
                 redirect('Maestros/Blog', 'refresh');
-
             } else {
                 redirect('Bienvenido');
             }
         } else {
             redirect('Bienvenido');
         }
-
     }
 
     public function EliminaBlog($IDBlogEliminar)
@@ -1722,7 +1683,6 @@ class Maestros extends CI_Controller
             if ($_SESSION['Tipo'] == 1) {
                 $this->M_Sensei->EliminaBlog($IDBlogEliminar);
                 redirect('Maestros/Blog', 'refresh');
-
             } else {
                 redirect('Bienvenido');
             }
@@ -1740,7 +1700,5 @@ class Maestros extends CI_Controller
     public function Documentos()
     {
         $this->load->view('Documentos');
-
     }
-
 } //fin del controlador

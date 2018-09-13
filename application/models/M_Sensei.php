@@ -19,7 +19,7 @@ class M_Sensei extends CI_Model
         return $this->db->get();
     }
 
-//======================================================================================================================
+    //======================================================================================================================
 
     public function Materias()
     {
@@ -36,7 +36,6 @@ class M_Sensei extends CI_Model
         $this->db->order_by("Materia_ID", "asc");
 
         return $this->db->get();
-
     }
 
     public function getProcentajeTareas($IDUnidad)
@@ -45,7 +44,6 @@ class M_Sensei extends CI_Model
         $this->db->from('SS_Tareas');
         $this->db->where('Tarea_Unidad_ID', $IDUnidad);
         return $this->db->get()->result()[0]->total;
-
     }
 
     public function getMaterias($idGrupo)
@@ -54,7 +52,6 @@ class M_Sensei extends CI_Model
         $this->db->from('SS_Materia');
         $this->db->where('Materia_Grupo_ID', $idGrupo);
         return $this->db->get();
-
     }
 
     public function getUnidades($IDMaterias)
@@ -79,7 +76,6 @@ class M_Sensei extends CI_Model
         $this->db->join('SS_Tareas', 'SS_Tareas.Tarea_Unidad_ID = SS_Unidades.Unidades_ID');
         $this->db->where('Materia_ID', $idMateria);
         return $this->db->get();
-
     }
     public function getTareasParaAlumno($IDUnidad)
     {
@@ -100,19 +96,16 @@ class M_Sensei extends CI_Model
         $this->db->from('SS_Grupo');
         $this->db->where('Grup_Usuario_ID', $_SESSION['ID_Usuario']);
         return $this->db->get();
-
     }
 
     //Selecciona el grupo de una materia
     public function getGrupoID($idmateria)
     {
-
         $this->db->select('*');
         $this->db->from('SS_Materia');
         $this->db->where('Materia_ID', $idmateria);
 
         return $this->db->get();
-
     }
 
     public function getMateria($idAula)
@@ -129,7 +122,6 @@ class M_Sensei extends CI_Model
     {
         $this->db->where('Grup_ID', $idGrupo);
         $this->db->update('SS_Grupo', array('Grup_Asignado' => 0));
-
     }
 
     public function GruposEnVistaCreaMaterias()
@@ -139,13 +131,11 @@ class M_Sensei extends CI_Model
         $this->db->where('Grup_Usuario_ID', $_SESSION['ID_Usuario']);
         $this->db->where('Grup_Asignado', 0);
         return $this->db->get();
-
     }
 
-//Revisar este query no se esta seguro
+    //Revisar este query no se esta seguro
     public function ListaAlumnos($grupo)
     {
-
         $this->db->select('Maestro.Usuario_ID AS ID_Maestro');
         $this->db->select('Maestro.Usuario_Nombre AS Maestro_Nombre');
         $this->db->select('SS_Usuarios.Usuario_ID AS Alumno_ID');
@@ -175,7 +165,6 @@ class M_Sensei extends CI_Model
         $this->db->join('SS_Materia', 'SS_Alumnos_Registrados.Resgistro_MateriaID = SS_Materia.Materia_ID');
         $this->db->where('Materia_ID', $IDMateria);
         return $this->db->get();
-
     }
 
     public function AlumnosEntregaronTarea()
@@ -195,12 +184,10 @@ class M_Sensei extends CI_Model
         $this->db->order_by("Archi_Fecreacion", "asc");
 
         return $this->db->get();
-
     }
 
     public function AlumnosEntregaronTareaFiltrado($idAlumno, $IDMateria, $idUnidad)
     {
-
         $this->db->select('*');
         //$this->db->from('VistaTareasEntregadas');
         $this->db->from('SS_Archivos');
@@ -218,7 +205,6 @@ class M_Sensei extends CI_Model
         $this->db->order_by("Archi_Fecreacion", "asc");
 
         return $this->db->get();
-
     }
 
     public function NombreMateria($idMateria)
@@ -241,11 +227,10 @@ class M_Sensei extends CI_Model
         $data = $this->db->get();
         foreach ($data->result() as $key) {
             return $key->Unidad_Descripcion;
-
         }
     }
 
-//Filtrado de archivos de tareas entregadas por los alumnos
+    //Filtrado de archivos de tareas entregadas por los alumnos
     public function TareasXUnidadesFiltrados($IdMateria, $IDUnidad)
     {
         $this->db->select('*');
@@ -263,7 +248,6 @@ class M_Sensei extends CI_Model
         $this->db->where('Archi_Status', '1');
 
         return $this->db->get();
-
     }
 
     public function TareasXUnidadesFiltrados2($IdMateria, $IDUnidad)
@@ -282,7 +266,6 @@ class M_Sensei extends CI_Model
         $this->db->where('Archi_Status', '2');
 
         return $this->db->get();
-
     }
 
     public function getTareaRealizadas($idTarea)
@@ -326,7 +309,6 @@ class M_Sensei extends CI_Model
         $this->db->from('SS_Tareas');
         $this->db->where('Tarea_ID', $ID);
         return $this->db->get();
-
     }
 
     public function TareasXUnidadesFiltradosCompletos($IdMateria, $IDUnidad)
@@ -345,12 +327,10 @@ class M_Sensei extends CI_Model
         $this->db->where('Archi_Status', '2');
 
         return $this->db->get();
-
     }
 
     public function TareasCalificadas()
     {
-
         $this->db->select('*');
         //$this->db->from('VistaTareasEntregadas');
         $this->db->from('SS_Archivos');
@@ -365,7 +345,6 @@ class M_Sensei extends CI_Model
         $this->db->order_by("Archi_Fecreacion", "asc");
 
         return $this->db->get();
-
     }
 
     //Fin
@@ -391,7 +370,6 @@ class M_Sensei extends CI_Model
         $this->db->where('Unidad_Usuario_ID', $_SESSION['ID_Usuario']);
 
         return $this->db->get();
-
     }
 
     public function FiltradoRevisionTareas($materiaID, $GrupoID, $UnidadID)
@@ -425,7 +403,6 @@ class M_Sensei extends CI_Model
         $this->db->where('Usuario_ID', $this->session->ID_Usuario);
 
         return $this->db->get();
-
     }
 
     //SUMA DE TAREAS DEL ALUMNO PARA PROMEDIAR
@@ -441,7 +418,6 @@ class M_Sensei extends CI_Model
         $this->db->where('Materia_ID', $id_materia);
 
         return $this->db->get()->result()[0]->total_alumno;
-
     }
 
     public function CalificacionMateriaAlumno($id_alumno, $calificacion, $id_materia)
@@ -449,7 +425,6 @@ class M_Sensei extends CI_Model
         $this->db->where('Resgistro_AlumnoID', $id_alumno);
         $this->db->where('Resgistro_MateriaID', $id_materia);
         $this->db->update('SS_Alumnos_Registrados', array('Resgistro_Calificacion_Final' => $calificacion));
-
     }
 
     public function UnidadesFiltrada($idMateria)
@@ -462,9 +437,8 @@ class M_Sensei extends CI_Model
         $this->db->where('Materia_ID', $idMateria);
 
         return $this->db->get();
-
     }
-//TAREAS CREADAS POR EL MAESTRO RETORNA EL TOTAL CREADOS
+    //TAREAS CREADAS POR EL MAESTRO RETORNA EL TOTAL CREADOS
     public function TareasCreadas()
     {
         $this->db->select('*');
@@ -479,12 +453,10 @@ class M_Sensei extends CI_Model
         $variable = $this->db->get();
 
         return $variable->num_rows();
-
     }
 
     public function DocumentosDeMateria($Value)
     {
-
         $this->db->select('*');
         $this->db->from('SS_Materia');
         $this->db->join('SS_Documentos', 'SS_Materia.Materia_ID = SS_Documentos.Documento_MateriaID');
@@ -546,7 +518,6 @@ class M_Sensei extends CI_Model
         $this->db->from('SS_Archivos');
         $this->db->where('Archi_ID', $id);
         return $this->db->get();
-
     }
 
     public function setEdicionDocumento($idTarea, $contenido)
@@ -554,7 +525,6 @@ class M_Sensei extends CI_Model
         $this->db->where('Archi_ID', $idTarea);
 
         $this->db->update('SS_Archivos', $contenido);
-
     }
 
     public function AppConsultaBlogAlumnos($IdAlumno)
@@ -598,7 +568,6 @@ class M_Sensei extends CI_Model
 
     public function EliminaDocuemtoMateria($idDocumento)
     {
-
         $this->db->select('Documento_ruta');
         $this->db->from('SS_Documentos');
         $this->db->where('Docuemnto_ID', $idDocumento);
@@ -616,13 +585,11 @@ class M_Sensei extends CI_Model
         } else {
             return 0;
         }
-
     }
 
     //ELIMINA MATERIA DE MAESTRO
     public function EliminarMateriaMaestro($id)
     {
-
         $this->db->where('Materia_ID', $id);
         $this->db->delete('SS_Materia');
 
@@ -636,23 +603,21 @@ class M_Sensei extends CI_Model
         } else {
             $this->db->trans_commit();
         }
-
     }
-// RETORNA LA CANTIDA DE BLOG CREADAS POR EL MAESTRO
+    // RETORNA LA CANTIDA DE BLOG CREADAS POR EL MAESTRO
     public function NumeroDeBlogCreados()
     {
         // $this->db->select('*');
         // $this->db->from('SS_Blog');
         // $this->db->where('Blog_UsuarioID', $this->session->ID_Usuario);
         return $this->db->where('Blog_UsuarioID', $this->session->ID_Usuario)->count_all_results('SS_Blog');
-
     }
-/* RETORNA EL NUMERO DE TAREAS CREADAS POR EL MAESTRO
-public function NumeroTareasCreadas()
-{
-
-return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_all_results('SS_Tareas');
-}*/
+    /* RETORNA EL NUMERO DE TAREAS CREADAS POR EL MAESTRO
+    public function NumeroTareasCreadas()
+    {
+    
+    return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_all_results('SS_Tareas');
+    }*/
 
     public function NumeroTareasPorMateria($idMateria)
     {
@@ -662,7 +627,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
         $this->db->where('Materia_ID', $idMateria);
         return $this->db->get()->result()[0]->total;
-
     }
 
     public function NumeroDeunidadesPorMateria($idMateria)
@@ -672,7 +636,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->join('SS_Unidades', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
         $this->db->where('Materia_ID', $idMateria);
         return $this->db->get()->result()[0]->TotalUnidades;
-
     }
 
     public function getNombreMateria($idMateria)
@@ -703,9 +666,8 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         foreach ($query->result() as $key) {
             return $key->Usuario_Nombre;
         }
-
     }
-/////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////
     //DATOS DEL ALUMNO
 
     public function getInformacionAlumno($id_alumno)
@@ -714,7 +676,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->from('SS_Usuarios');
         $this->db->where('Usuario_ID', $id_alumno);
         return $this->db->get();
-
     }
 
     public function getCalificacionAlumnoenMateria($id_alumno, $id_materia)
@@ -725,7 +686,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Resgistro_MateriaID', $id_materia);
 
         return $this->db->get()->result()[0]->Resgistro_Calificacion_Final;
-
     }
 
     public function TareasEntregadasporAlumno($idalumno, $idMateria)
@@ -742,7 +702,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
 
     public function TareasEntregadasporAlumnoCalificadas($idalumno, $idMateria)
     {
-
         $this->db->select('COUNT(*) AS total');
         $this->db->from('SS_Archivos');
 
@@ -769,7 +728,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
 
         $this->db->order_by('Unidades_ID', 'ASC');
         return $this->db->get();
-
     }
 
     public function getInfoMateria($ID_Materia, $unidad)
@@ -790,7 +748,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
 
     public function SumaTareasPorMateriaAndAlumno($idalumno, $idMateria)
     {
-
         $this->db->select('SUM(Archi_Calificacion) AS Total');
         $this->db->from('SS_Archivos');
         $this->db->where('Archi_Materia_ID', $idMateria);
@@ -821,12 +778,10 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Usuario_ID', $this->session->ID_Usuario);
         $this->db->where('Archi_Status', 1);
         return $this->db->get()->num_rows();
-
     }
 
     public function NumeroTareasEntregadasCalificadas()
     {
-
         $this->db->select('*');
         $this->db->from('SS_Archivos');
         $this->db->join('SS_Tareas', 'SS_Tareas.Tarea_ID = SS_Archivos.Archi_TareaID');
@@ -846,7 +801,7 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Resgistro_MateriaID', $idMateria);
         return $this->db->get()->result()[0]->Resgistro_Calificacion_Final;
     }
-// RETORNA NUMERO DE COMENTARIOS DE ALUMNOS EN LOS BLOG
+    // RETORNA NUMERO DE COMENTARIOS DE ALUMNOS EN LOS BLOG
     public function NumeroComentarios()
     {
         $query = $this->db->query("SELECT
@@ -860,7 +815,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         foreach ($query->result() as $key) {
             return $key->total;
         }
-
     }
 
     // COMENTARIOS DE ALUMNOS EN BLOG
@@ -902,7 +856,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         }*/
 
         $this->db->insert('SS_Materia', $datos);
-
     }
 
     public function GuardaBlog($dato)
@@ -923,7 +876,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
 
     public function GuardaGrupos($datos)
     {
-
         $this->db->insert('SS_Grupo', $datos);
     }
 
@@ -937,7 +889,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
     {
         $this->db->where('Tarea_ID', $idTarea);
         $this->db->update('SS_Tareas', $data);
-
     }
 
     public function ProximasTareasMaestros()
@@ -957,7 +908,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Usuario_ID', $_SESSION['ID_Usuario']);
 
         return $this->db->get();
-
     }
 
     // public function GuardarUsuario($data)
@@ -982,7 +932,23 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
     public function GuardaTareas($data)
     {
         $this->db->insert('SS_Tareas', $data);
-        return $this->db->affected_rows();
+        return $this->db->insert_id();
+    }
+    public function alumnosregistrosporunidad($UnidadID)
+    {
+       $this->db->select('*');
+       $this->db->from('ss_alumnos_registrados');
+       $this->db->join('ss_materia', 'ss_alumnos_registrados.Resgistro_MateriaID = ss_materia.Materia_ID');
+       $this->db->join('ss_unidades', 'ss_unidades.Unidad_Materia_ID = ss_materia.Materia_ID');
+       $this->db->where('Unidades_ID', $UnidadID);
+       return $this->db->get();
+       
+    }
+  
+    public function crearTarea($datos)
+    {
+     $this->db->insert('ss_archivos', $datos);
+       
     }
 
     public function GuardaDocumentosPorMateria($data)
@@ -1008,13 +974,11 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
 
     public function GuardaRegistroGrupo($data)
     {
-
         $msn = $this->db->insert('SS_Alumnos_Registrados', $data);
 
         if (!$msn) {
             $this->session->set_flashdata('error', 'Codigo de materia incorrecto, favor de verificar');
         } else {
-
             $this->session->set_flashdata('mensaje', 'Usuario registrado correctamente!');
         }
     }
@@ -1029,7 +993,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $var = $this->db->get();
 
         return $var->num_rows();
-
     }
 
     //Materias de alumnos registrado
@@ -1054,7 +1017,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Resgistro_AlumnoID', $_SESSION['ID_Usuario']);
 
         return $this->db->get();
-
     }
 
     public function MisTareas()
@@ -1073,7 +1035,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->order_by("Tarea_ID", "asc");
 
         return $this->db->get();
-
     }
 
     public function TareasEntregadas()
@@ -1089,7 +1050,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Archi_PerteneceID', $_SESSION['ID_Usuario']);
 
         return $this->db->get();
-
     }
     public function TareasEntregadasFiltradas($idAlumno, $IDMateria, $IdUnidad)
     {
@@ -1107,7 +1067,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Unidades_ID', $IdUnidad);
 
         return $this->db->get();
-
     }
 
     public function EliminarTareaAlumno($data)
@@ -1131,7 +1090,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
           AND SS_Archivos.Archi_PerteneceID = ' . $this->session->ID_Usuario . ')
           ORDER BY
           VistaTareasPorHacer.Tarea_Fecha_fin ASC');
-
     }
 
     public function getTareaHechaPorElAlumno($idTarea)
@@ -1146,7 +1104,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
         $this->db->where('Archi_TareaID', $idTarea);
 
         return $this->db->get()->result()[0]->Archi_Status;
-
     }
     public function getCalificacionTarea($idTarea)
     {
@@ -1163,7 +1120,6 @@ return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_
 
     public function GuardaArchivosTareas($data)
     {
-
         $this->db->insert('SS_Archivos', $data);
     }
 }
