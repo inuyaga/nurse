@@ -615,7 +615,7 @@ class M_Sensei extends CI_Model
     /* RETORNA EL NUMERO DE TAREAS CREADAS POR EL MAESTRO
     public function NumeroTareasCreadas()
     {
-    
+
     return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_all_results('SS_Tareas');
     }*/
 
@@ -936,19 +936,19 @@ class M_Sensei extends CI_Model
     }
     public function alumnosregistrosporunidad($UnidadID)
     {
-       $this->db->select('*');
-       $this->db->from('ss_alumnos_registrados');
-       $this->db->join('ss_materia', 'ss_alumnos_registrados.Resgistro_MateriaID = ss_materia.Materia_ID');
-       $this->db->join('ss_unidades', 'ss_unidades.Unidad_Materia_ID = ss_materia.Materia_ID');
-       $this->db->where('Unidades_ID', $UnidadID);
-       return $this->db->get();
-       
+        $this->db->select('*');
+        $this->db->from('SS_Alumnos_Registrados');
+        $this->db->join('SS_Materia', 'SS_Alumnos_Registrados.Resgistro_MateriaID = SS_Materia.Materia_ID');
+        $this->db->join('SS_Unidades', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
+        $this->db->where('Unidades_ID', $UnidadID);
+        return $this->db->get();
+
     }
-  
+
     public function crearTarea($datos)
     {
-     $this->db->insert('ss_archivos', $datos);
-       
+        $this->db->insert('SS_Archivos', $datos);
+
     }
 
     public function GuardaDocumentosPorMateria($data)

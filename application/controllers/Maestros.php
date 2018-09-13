@@ -413,17 +413,17 @@ class Maestros extends CI_Controller
                 echo "Tarea creada correctamente";
                 switch ($entregable) {
                     case 2:
-                   $query= $this->M_Sensei->alumnosregistrosporunidad($UnidadID);
-                   
-                   foreach ($query->result() as $key) {
-                    $datosporAlumno = array(
-                        'Archi_PerteneceID' => $key->Resgistro_AlumnoID, 
-                        'Archi_Status' => '1', 
-                        'Archi_TareaID' => $res, 
-                        'Archi_Tipo' => 0, 
-                     );
-                     $this->M_Sensei->crearTarea($datosporAlumno);
-                   }
+                        $query = $this->M_Sensei->alumnosregistrosporunidad($UnidadID);
+
+                        foreach ($query->result() as $key) {
+                            $datosporAlumno = array(
+                                'Archi_PerteneceID' => $key->Resgistro_AlumnoID,
+                                'Archi_Status' => '1',
+                                'Archi_TareaID' => $res,
+                                'Archi_Tipo' => 0,
+                            );
+                            $this->M_Sensei->crearTarea($datosporAlumno);
+                        }
 
                         break;
                 }

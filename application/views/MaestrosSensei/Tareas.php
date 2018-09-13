@@ -125,8 +125,8 @@
 
             <div class="col-md-6">
               <div class="form-group">
-               
-              
+
+
 
               <div class="radio">
                 <label><input type="radio" name="entregable" value="1" checked>Para entrega</label>
@@ -245,7 +245,7 @@
     },
     submitHandler: function (form) {
 
-      $.post("<?= base_url('Maestros/GuardaTareas') ?>",
+      $.post("<?=base_url('Maestros/GuardaTareas')?>",
         {
           Nombre: $('#NombreTarea').val(),
           descripcion: $('#TDescripcion').val(),
@@ -253,7 +253,7 @@
           fechaInicio: $('#TFechaInicio').val(),
           fechaFinal: $('#TFechaFinal').val(),
           valor: $('#valor').val(),
-          entregable: $('input:radio[name=entregable]:checked').val() 
+          entregable: $('input:radio[name=entregable]:checked').val()
         },
         function (data, status) {
           // $('#Tabla').html(data);
