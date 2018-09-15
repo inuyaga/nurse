@@ -406,7 +406,7 @@ class M_Sensei extends CI_Model
     }
 
     //SUMA DE TAREAS DEL ALUMNO PARA PROMEDIAR
-    public function getSumaTareasAlumno($id_alumno, $id_materia)
+    public function getSumaTareasAlumno($id_alumno, $id_unidad)
     {
         $this->db->select('SUM(Archi_Calificacion) AS total_alumno');
 
@@ -415,16 +415,36 @@ class M_Sensei extends CI_Model
         $this->db->join('SS_Unidades', 'SS_Unidades.Unidades_ID = SS_Tareas.Tarea_Unidad_ID');
         $this->db->join('SS_Materia', 'SS_Materia.Materia_ID = SS_Unidades.Unidad_Materia_ID');
         $this->db->where('Archi_PerteneceID', $id_alumno);
-        $this->db->where('Materia_ID', $id_materia);
+        $this->db->where('Unidades_ID', $id_unidad);
 
         return $this->db->get()->result()[0]->total_alumno;
     }
 
-    public function CalificacionMateriaAlumno($id_alumno, $calificacion, $id_materia)
+    public function CalificacionMateriaAlumno($id_alumno, $calificacion, $id_unidad)
     {
-        $this->db->where('Resgistro_AlumnoID', $id_alumno);
-        $this->db->where('Resgistro_MateriaID', $id_materia);
-        $this->db->update('SS_Alumnos_Registrados', array('Resgistro_Calificacion_Final' => $calificacion));
+        $this->db->trans_begin();
+
+        $condicinalEliminaciom = array(
+            'Calificacion_Unidad_ID' => $id_unidad,
+            'Calificacion_Alumno_ID' => $id_alumno,
+        );
+        $this->db->where($condicinalEliminaciom);
+        $this->db->delete('SS_Calificacion_unidad');
+
+        $insertCalificacion = array(
+            'Calificacion_Unidad_ID' => $id_unidad,
+            'Calificacion_Alumno_ID' => $id_alumno,
+            'Calificacion_Calificacion' => $calificacion,
+        );
+
+        $this->db->insert('SS_Calificacion_unidad', $insertCalificacion);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+        } else {
+            $this->db->trans_commit();
+        }
+
     }
 
     public function UnidadesFiltrada($idMateria)
@@ -619,23 +639,22 @@ class M_Sensei extends CI_Model
     return $this->db->where('Tarea_UsuarioM_ID', $this->session->ID_Usuario)->count_all_results('SS_Tareas');
     }*/
 
-    public function NumeroTareasPorMateria($idMateria)
+    public function NumeroTareasPorMateria($ID_UNIDAD)
     {
         $this->db->select('COUNT(*) AS total');
         $this->db->from('SS_Tareas');
         $this->db->join('SS_Unidades', 'SS_Tareas.Tarea_Unidad_ID = SS_Unidades.Unidades_ID');
         $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
-        $this->db->where('Materia_ID', $idMateria);
+        $this->db->where('Unidades_ID', $ID_UNIDAD);
         return $this->db->get()->result()[0]->total;
     }
 
-    public function NumeroDeunidadesPorMateria($idMateria)
+    public function getNombreUnidad($IDUnidad)
     {
-        $this->db->select('COUNT(*) AS TotalUnidades');
-        $this->db->from('SS_Materia');
-        $this->db->join('SS_Unidades', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
-        $this->db->where('Materia_ID', $idMateria);
-        return $this->db->get()->result()[0]->TotalUnidades;
+        $this->db->select('Unidad_Descripcion');
+        $this->db->from('SS_Unidades');
+        $this->db->where('Unidades_ID', $IDUnidad);
+        return $this->db->get()->result()[0]->Unidad_Descripcion;
     }
 
     public function getNombreMateria($idMateria)
@@ -688,19 +707,19 @@ class M_Sensei extends CI_Model
         return $this->db->get()->result()[0]->Resgistro_Calificacion_Final;
     }
 
-    public function TareasEntregadasporAlumno($idalumno, $idMateria)
+    public function TareasEntregadasporAlumno($idalumno, $id_Unidad)
     {
         $this->db->select('COUNT(*) AS total');
         $this->db->from('SS_Archivos');
         $this->db->join('SS_Tareas', 'SS_Archivos.Archi_TareaID = SS_Tareas.Tarea_ID');
         $this->db->join('SS_Unidades', 'SS_Tareas.Tarea_Unidad_ID = SS_Unidades.Unidades_ID');
         $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
-        $condicion = array('Materia_ID' => $idMateria, 'Archi_PerteneceID' => $idalumno);
+        $condicion = array('Unidades_ID' => $id_Unidad, 'Archi_PerteneceID' => $idalumno);
         $this->db->where($condicion);
         return $this->db->get()->result()[0]->total;
     }
 
-    public function TareasEntregadasporAlumnoCalificadas($idalumno, $idMateria)
+    public function TareasEntregadasporAlumnoCalificadas($idalumno, $id_Unidad)
     {
         $this->db->select('COUNT(*) AS total');
         $this->db->from('SS_Archivos');
@@ -709,12 +728,12 @@ class M_Sensei extends CI_Model
         $this->db->join('SS_Unidades', 'SS_Tareas.Tarea_Unidad_ID = SS_Unidades.Unidades_ID');
         $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
 
-        $condicion = array('Materia_ID' => $idMateria, 'Archi_PerteneceID' => $idalumno, 'Archi_Status' => 2);
+        $condicion = array('Unidades_ID' => $id_Unidad, 'Archi_PerteneceID' => $idalumno, 'Archi_Status' => 2);
         $this->db->where($condicion);
         return $this->db->get()->result()[0]->total;
     }
 
-    public function GetHistorialareasAlumno($IDALUMON, $IDMATERIA)
+    public function GetHistorialareasAlumno($IDALUMON, $Unidad_ID)
     {
         $this->db->select('*');
         $this->db->from('SS_Archivos');
@@ -724,7 +743,7 @@ class M_Sensei extends CI_Model
         $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
 
         $this->db->where('Archi_PerteneceID', $IDALUMON);
-        $this->db->where('Materia_ID', $IDMATERIA);
+        $this->db->where('Unidades_ID', $Unidad_ID);
 
         $this->db->order_by('Unidades_ID', 'ASC');
         return $this->db->get();
@@ -1121,5 +1140,14 @@ class M_Sensei extends CI_Model
     public function GuardaArchivosTareas($data)
     {
         $this->db->insert('SS_Archivos', $data);
+    }
+
+    public function getUnidadesMaterias($ID_Materia)
+    {
+        $this->db->select('*');
+        $this->db->from('SS_Unidades');
+        $this->db->where('Unidad_Materia_ID', $ID_Materia);
+        return $this->db->get();
+
     }
 }

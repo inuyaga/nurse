@@ -318,6 +318,15 @@ class Maestros extends CI_Controller
             echo '<option value="' . $key->Materia_ID . '">' . $key->Materia_Nombre . '</option>';
         }
     }
+    public function getUnidadesMateria()
+    {
+        $ID = $this->input->post('ID_MATERIA');
+        echo '<option value="" disabled selected>Elija una opcion</option>';
+        $query = $this->M_Sensei->getUnidadesMaterias($ID);
+        foreach ($query->result() as $key) {
+            echo '<option value="' . $key->Unidades_ID . '">' . $key->Unidad_Descripcion . '</option>';
+        }
+    }
 
     public function getUnidades()
     {
@@ -1211,11 +1220,12 @@ class Maestros extends CI_Controller
 
     public function getDatosMateria(Type $var = null)
     {
-        $NombreMateria = $this->M_Sensei->getNombreMateria($this->input->post('IDMateria'));
-        $UnidadesMateria = $this->M_Sensei->NumeroDeunidadesPorMateria($this->input->post('IDMateria'));
-        $TareasMateria = $this->M_Sensei->NumeroTareasPorMateria($this->input->post('IDMateria'));
+        $NombreMateria = $this->M_Sensei->getNombreMateria($this->input->post('ID_MATERIA'));
+        $UnidadesMateria = $this->M_Sensei->getNombreUnidad($this->input->post('Unidad_ID'));
+        $TareasMateria = $this->M_Sensei->NumeroTareasPorMateria($this->input->post('Unidad_ID'));
 
         echo '
+
             <div class="col-lg-4 col-sm-6">
             <div class="card">
                 <div class="content">
@@ -1256,7 +1266,7 @@ class Maestros extends CI_Controller
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Unidades</p>
+                                            <p>Unidad Nombre</p>
                                             <div id="numero_unidades">' . $UnidadesMateria . '</div>
                                         </div>
                                     </div>
@@ -1285,7 +1295,7 @@ class Maestros extends CI_Controller
                         </div>
                         <div class="col-xs-7">
                             <div class="numbers">
-                                <p>Tareas</p>
+                                <p>Total tareas de unidad</p>
                                 <div id="TotalTareas">' . $TareasMateria . '</div>
                             </div>
                         </div>
@@ -1300,6 +1310,7 @@ class Maestros extends CI_Controller
             </div>
         </div>
 
+
             ';
     }
 
@@ -1313,15 +1324,17 @@ class Maestros extends CI_Controller
     {
         $IDMATERIA = $this->input->post('ID_MATERIA');
         $IDALUMNO = $this->input->post('ID_ALUMNO');
+        $ID_UNIDAD = $this->input->post('ID_UNIDAD');
 
         $Alumno = $this->M_Sensei->getInformacionAlumno($IDALUMNO);
-        $Entregadas = $this->M_Sensei->TareasEntregadasporAlumno($IDALUMNO, $IDMATERIA);
-        $calificadas = $this->M_Sensei->TareasEntregadasporAlumnoCalificadas($IDALUMNO, $IDMATERIA);
-        $historial = $this->M_Sensei->GetHistorialareasAlumno($IDALUMNO, $IDMATERIA);
+        $Entregadas = $this->M_Sensei->TareasEntregadasporAlumno($IDALUMNO, $ID_UNIDAD);
+        $calificadas = $this->M_Sensei->TareasEntregadasporAlumnoCalificadas($IDALUMNO, $ID_UNIDAD);
+        $historial = $this->M_Sensei->GetHistorialareasAlumno($IDALUMNO, $ID_UNIDAD);
         $calificacionAlumno = $this->M_Sensei->getCalificacionAlumnoenMateria($IDALUMNO, $IDMATERIA);
 
         foreach ($Alumno->result() as $key) {
             echo '
+               <div class="row">
                <div class="col-lg-3 col-sm-6">
                <div class="card">
                    <div class="content">
@@ -1347,6 +1360,7 @@ class Maestros extends CI_Controller
                    </div>
                </div>
            </div>
+
                ';
         }
 
@@ -1430,6 +1444,7 @@ class Maestros extends CI_Controller
                     </div>
                 </div>
             </div>
+        </div>
         </div>
             ';
 
@@ -1520,15 +1535,13 @@ class Maestros extends CI_Controller
     public function Calificacion_final_alumno()
     {
         $total_tareas = $this->input->post('total_tareas');
-
         $id_alumno = $this->input->post('id_alumno');
         $id_materia = $this->input->post('id_materia');
+        $ID_UNIDAD = $this->input->post('ID_UNIDAD');
 
-        $suma_tareas_alumno = $this->M_Sensei->getSumaTareasAlumno($id_alumno, $id_materia);
-
+        $suma_tareas_alumno = $this->M_Sensei->getSumaTareasAlumno($id_alumno, $ID_UNIDAD);
         $resultado = $suma_tareas_alumno / $total_tareas;
-
-        $this->M_Sensei->CalificacionMateriaAlumno($id_alumno, $resultado, $id_materia);
+        $this->M_Sensei->CalificacionMateriaAlumno($id_alumno, $resultado, $ID_UNIDAD);
 
         echo $resultado;
     }
