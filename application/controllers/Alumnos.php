@@ -187,9 +187,6 @@ class Alumnos extends CI_Controller
                   <td>' . $key->Tarea_Fecha_fin . '</td>
                   <td>';
 
-            
-
-
             if ($this->M_Sensei->getTareaHechaPorElAlumno($key->Tarea_ID) == 0) {
                 if ($this->dateDiff(date("y-m-d"), $key->Tarea_Fecha_fin) >= -0) {
                     echo '
@@ -198,7 +195,7 @@ class Alumnos extends CI_Controller
                     <i class="ti-google"></i>
                     Google Drive
                     </button>
-    
+
                     <a class="btn btn-success" type="button" class="btn btn-primary" href="' . base_url('Alumnos/NuevoDoc/' . $key->Tarea_ID) . '"><i class="ti-file"></i> Crear documento</a>
                     ';
                 }
@@ -351,6 +348,38 @@ class Alumnos extends CI_Controller
         } else {
             redirect('Bienvenido');
         }
+    }
+
+    public function calificacion_unidad()
+    {
+        $idMat = $this->input->post('idMat');
+        $query = $this->M_Sensei->getCalificacion_unidad($idMat);
+
+        echo '
+        <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Unidad</th>
+                    <th scope="col">Calificación</th>
+                    </tr>
+                </thead>
+                <tbody>
+        ';
+        foreach ($query->result() as $key) {
+
+            echo '
+                    <tr>
+                    <th scope="row">' . $key->Unidad_Descripcion . '</th>
+                    <th scope="row">' . $key->Calificacion_Calificacion . '</th>
+                    </tr>
+            ';
+
+        }
+
+        echo '</tbody>
+            </table>
+        ';
+
     }
     public function Perfil()
     {

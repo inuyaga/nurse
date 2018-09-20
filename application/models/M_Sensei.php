@@ -1150,4 +1150,17 @@ class M_Sensei extends CI_Model
         return $this->db->get();
 
     }
+
+    public function getCalificacion_unidad($id_materia)
+    {
+        $this->db->select('*');
+        $this->db->from('SS_Calificacion_unidad');
+        $this->db->join('SS_Unidades', 'SS_Unidades.Unidades_ID = SS_Calificacion_unidad.Calificacion_Unidad_ID');
+        $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
+
+        $this->db->where('Materia_ID', $id_materia);
+        $this->db->where('Calificacion_Alumno_ID', $_SESSION['ID_Usuario']);
+        return $this->db->get();
+
+    }
 }
