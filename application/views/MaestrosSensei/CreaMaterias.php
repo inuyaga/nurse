@@ -5,7 +5,7 @@
 			<h4 class="title">Crear materia</h4>
 		</div>
 		<div class="content">
-			<form action="<?= base_url('Maestros/GuardaMaterias') ?>" method="POST">
+			<form action="<?=base_url('Maestros/GuardaMaterias')?>" method="POST">
 				<div class="row">
 					<div class="col-md-3">
 						<div class="form-group">
@@ -18,8 +18,8 @@
 						    <label for="exampleFormControlSelect1">Seleccione Aula</label>
 						    <select class="form-control" id="exampleFormControlSelect1" name="IDGrupo" required>
 						      <?php foreach ($Grupos->result() as $grupo): ?>
-						      	<option value="<?= $grupo->Grup_ID ?>"><?= $grupo->Grup_Nombre ?></option>
-						      <?php endforeach ?>
+						      	<option value="<?=$grupo->Grup_ID?>"><?=$grupo->Grup_Nombre?></option>
+						      <?php endforeach?>
 						    </select>
 				        </div>
 					</div>
@@ -59,7 +59,7 @@
 						<th scope="col">#Inscripcion</th>
 			  			<th scope="col">Materia</th>
 			  			<th scope="col">Creado</th>
-			  			<th scope="col">Grupo</th>
+			  			<th scope="col">Aula</th>
 			  			<th scope="col">Subir</th>
 			  			<th scope="col">Ver</th>
 			  			<th scope="col">Alumnos</th>
@@ -67,18 +67,18 @@
 					</tr>
 				</thead>
 				<tbody>
-          <?php foreach ($Materias->result() as $materias): ?> 
+          <?php foreach ($Materias->result() as $materias): ?>
              <tr>
-               <td><?= $materias->Materia_ID ?></td>
-  				<td><?= $materias->Materia_Nombre ?></td>
-  				<td><?= $materias->Materia_Fecha_Crea ?></td>
-  				<td><?= $materias->Grup_Nombre ?></td>
-					<td><button class="btn btn-success btn-sm" type="button" onclick="pasarinfo('<?= $materias->Materia_ID ?>', '<?= $materias->Materia_Nombre ?>')"  data-toggle="modal" data-target="#subirDocumento" data-whatever="@mdo" data-backdrop="false">Subir</button></td>
-					<td><button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#DocuemntosMaterias" data-backdrop="false" onclick="VerDocuemtosMaterias(<?= $materias->Materia_ID ?>)">Ver</button></td>
-  				<td><button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#ListaAlumnos" data-backdrop="false" onclick="lista(<?= $materias->Materia_ID ?>)">Lista</button></td>
-  				<td> <a href="<?= base_url('Maestros/InformacionEliminaMateria/').$materias->Materia_ID ?>" class="btn btn-danger btn-sm"><?= $materias->Materia_ID ?>Eliminar</a></td>
+               <td><?=$materias->Materia_ID?></td>
+  				<td><?=$materias->Materia_Nombre?></td>
+  				<td><?=$materias->Materia_Fecha_Crea?></td>
+  				<td><?=$materias->Grup_Nombre?></td>
+					<td><button class="btn btn-success btn-sm" type="button" onclick="pasarinfo('<?=$materias->Materia_ID?>', '<?=$materias->Materia_Nombre?>')"  data-toggle="modal" data-target="#subirDocumento" data-whatever="@mdo" data-backdrop="false">Subir</button></td>
+					<td><button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#DocuemntosMaterias" data-backdrop="false" onclick="VerDocuemtosMaterias(<?=$materias->Materia_ID?>)">Ver</button></td>
+  				<td><button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#ListaAlumnos" data-backdrop="false" onclick="lista(<?=$materias->Materia_ID?>)">Lista</button></td>
+  				<td> <a href="<?=base_url('Maestros/InformacionEliminaMateria/') . $materias->Materia_ID?>" class="btn btn-danger btn-sm">Eliminar</a></td>
              </tr>
-          <?php endforeach; ?> 
+          <?php endforeach;?>
 				</tbody>
 			</table>
 
@@ -100,7 +100,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="<?= base_url('Maestros/GuardaDocumentosPorMateria') ?>" enctype="multipart/form-data" method="POST">
+        <form action="<?=base_url('Maestros/GuardaDocumentosPorMateria')?>" enctype="multipart/form-data" method="POST">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">

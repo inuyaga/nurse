@@ -19,7 +19,7 @@ class MYPDF extends TCPDF
         $this->SetFont('helvetica', 'B', 23);
         // Title
         $this->Ln(4);
-        $this->Cell(0, 20, 'CALIFICACION FINAL DE MATERIA', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(0, 20, 'CALIFICACIÓN POR UNIDAD', 0, false, 'C', 0, '', 0, false, 'M', 'M');
         $this->Ln(4);
         // Logo
         // $image_file = FCPATH . 'computel.png';
@@ -48,7 +48,7 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('CCS');
-$pdf->SetTitle('CALIFICACION MATERIA');
+$pdf->SetTitle('CALIFICACION POR UNIDAD');
 $pdf->SetSubject('impresion');
 
 // set default header data
@@ -90,7 +90,7 @@ $pdf->AddPage('L', 'A4');
 //$pdf->setCellPaddings(1, 1, 1, 1);
 
 // set cell margins
-// $pdf->setCellMargins(1, 1, 1, 1);
+//$pdf->setCellMargins(1, 1, 1, 1);
 //$pdf->setCellPaddings($left = '2', $top = '2', $right = '2', $bottom = '2');
 
 // set color for background
@@ -108,36 +108,46 @@ $pdf->MultiCell(12, 15, '', 'LR', 'C', 0, 0); // Left and Right border only
 $pdf->MultiCell(12, 15, '', 'LRB', 'C', 0, 0); // Left,Right and Bottom border only
 $pdf->MultiCell(12, 15, '', 'LRBT', 'C', 0, 0); // Full border  */
 
+// move pointer to last page
 $tbl = '
 <table border="1" cellpadding="2" cellspacing="2" nobr="true">
  <tr>
-  <th align="center">Materia</th>
-  <th align="center">Alumno</th>
-  <th align="center">Calificación</th>
+  <th WIDTH="270">MATERIA</th>
+  <th WIDTH="270">UNIDAD</th>
+  <th WIDTH="230">NOMBRE ALUMNO</th>
+  <th WIDTH="70">ENTREGÓ</th>
+  <th WIDTH="80">PROMEDIO</th>
  </tr>';
 $cuerpo = '';
-foreach ($lista_alumno->result() as $key) {
-    $this->M_Sensei->set_calificacion_alumno($key->Materia_ID, $key->Usuario_ID, round($this->M_Sensei->suma_unidades_materia_alumno($key->Materia_ID, $key->Usuario_ID) / $total_unidades_materia, 2));
+foreach ($lista_calificacion->result() as $key) {
     $cuerpo = $cuerpo . '
-    <tr>
-        <td>' . $key->Materia_Nombre . '</td>
-        <td>' . $key->Usuario_Nombre . '</td>
-        <td>' . round($this->M_Sensei->suma_unidades_materia_alumno($key->Materia_ID, $key->Usuario_ID) / $total_unidades_materia, 2) . '</td>
-    </tr>
-    ';
-}
-$fin = '
-</table>
+<tr>
+  <td>' . $key->Materia_Nombre . '</td>
+  <td>' . $key->Unidad_Descripcion . '</td>
+  <td>' . $key->Usuario_Nombre . '</td>
+  <td align="center">' . $this->db->query("SELECT * FROM
+  SS_Archivos
+  INNER JOIN SS_Tareas ON SS_Archivos.Archi_TareaID = SS_Tareas.Tarea_ID
+  INNER JOIN SS_Unidades ON SS_Tareas.Tarea_Unidad_ID = SS_Unidades.Unidades_ID
+  INNER JOIN SS_Materia ON SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID
+  WHERE
+  SS_Archivos.Archi_PerteneceID = " . $key->Usuario_ID . " AND
+  SS_Unidades.Unidades_ID = " . $key->Unidades_ID . " AND
+  SS_Materia.Materia_ID = " . $key->Materia_ID . "
+  ")->num_rows() . ' de ' . $catidad_tareas_x_unidad . '</td>
+  <td align="center">' . $key->Calificacion_Calificacion . '</td>
+ </tr>
 ';
+}
+$fin = '</table>';
 $pdf->writeHTML($tbl . $cuerpo . $fin, true, false, false, false, '');
 
-// move pointer to last page
 $pdf->lastPage();
 
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('Calificacion_materia.pdf', 'I');
+$pdf->Output('CALIFICACION_UNIDAD.pdf', 'I');
 
 //============================================================+
 // END OF FILE

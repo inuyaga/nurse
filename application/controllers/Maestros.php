@@ -1546,16 +1546,31 @@ class Maestros extends CI_Controller
         echo $resultado;
     }
 
-    public function imp_materia()
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //impresion de reportes pdf de promedios de alumnos
+
+    public function imp_materia($id_materia)
     {
+        $data['lista_alumno'] = $this->M_Sensei->get_lista_alumnos($id_materia);
+        $data['total_unidades_materia'] = $this->M_Sensei->get_unidades_materias($id_materia);
+
         $this->load->library('Pdf');
-        $this->load->view('MaestrosSensei/impresionPDF');
+        $this->load->view('MaestrosSensei/impresionPDF', $data);
+    }
+    public function imp_materia_unidad($id_materia, $id_unidad)
+    {
+        $data['lista_calificacion'] = $this->M_Sensei->get_calificacion_unidad($id_materia, $id_unidad);
+        $data['catidad_tareas_x_unidad'] = $this->M_Sensei->get_tareas_unidad($id_materia, $id_unidad);
+
+        $this->load->library('Pdf');
+        $this->load->view('MaestrosSensei/impresionPdf_unidad', $data);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     public function chat()
     {
+
         $this->load->view('MaestrosSensei/incluir/head');
         $this->load->view('chat');
     }
@@ -1714,4 +1729,30 @@ class Maestros extends CI_Controller
     {
         $this->load->view('Documentos');
     }
+
+    public function promediar_alumnos_en_unidad()
+    {
+        $id_materia = $this->input->post('id_materia');
+        $ID_UNIDAD = $this->input->post('ID_UNIDAD');
+        $this->M_Sensei->delete_calf_unidad($ID_UNIDAD);
+
+        $catidad_tareas_x_unidad = $this->M_Sensei->get_tareas_unidad($id_materia, $ID_UNIDAD);
+
+        $lista_alumno = $this->M_Sensei->get_alumnos_en_materias($id_materia);
+
+        foreach ($lista_alumno->result() as $key) {
+            $promedio_alumno = $this->M_Sensei->get_suma_total_unidad_alumno($key->Resgistro_AlumnoID, $ID_UNIDAD) / $catidad_tareas_x_unidad;
+            $insertCalificacion = array(
+                'Calificacion_Unidad_ID' => $ID_UNIDAD,
+                'Calificacion_Alumno_ID' => $key->Resgistro_AlumnoID,
+                'Calificacion_Calificacion' => $promedio_alumno,
+            );
+
+            $this->M_Sensei->insert_calificacion_alumno_unidad($insertCalificacion);
+        }
+
+        echo 'Termino';
+
+    }
+
 } //fin del controlador

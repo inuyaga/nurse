@@ -1163,4 +1163,117 @@ class M_Sensei extends CI_Model
         return $this->db->get();
 
     }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+    // FUNCIONES DE PARA CALIFICAR LAS UNIDADES DE MATERIAS
+    public function delete_calf_unidad($id_unidad)
+    {
+        $this->db->where('Calificacion_Unidad_ID', $id_unidad);
+        $this->db->delete('SS_Calificacion_unidad');
+
+    }
+
+    public function get_tareas_unidad($id_materia, $id_unidad)
+    {
+        $this->db->select('*');
+        $this->db->from('SS_Materia');
+        $this->db->join('SS_Unidades', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
+        $this->db->join('SS_Tareas', 'SS_Tareas.Tarea_Unidad_ID = SS_Unidades.Unidades_ID');
+        $this->db->where('Materia_ID', $id_materia);
+        $this->db->where('Unidades_ID', $id_unidad);
+        $consulta = $this->db->get();
+
+        return $consulta->num_rows();
+
+    }
+
+    public function get_alumnos_en_materias($id_materia)
+    {
+        $this->db->select('*');
+        $this->db->from('SS_Alumnos_Registrados');
+        $this->db->join('SS_Materia', 'SS_Alumnos_Registrados.Resgistro_MateriaID = SS_Materia.Materia_ID');
+        $this->db->join('SS_Usuarios', 'SS_Alumnos_Registrados.Resgistro_AlumnoID = SS_Usuarios.Usuario_ID');
+        $this->db->where('Materia_ID', $id_materia);
+        return $this->db->get();
+
+    }
+
+    public function get_suma_total_unidad_alumno($id_alumno, $id_unidad)
+    {
+        $this->db->select('SUM(SS_Archivos.Archi_Calificacion) AS suma_alumno');
+        $this->db->from('SS_Archivos');
+        $this->db->join('SS_Tareas', 'SS_Archivos.Archi_TareaID = SS_Tareas.Tarea_ID');
+        $this->db->join('SS_Unidades', 'SS_Tareas.Tarea_Unidad_ID = SS_Unidades.Unidades_ID');
+        $this->db->where('Archi_PerteneceID', $id_alumno);
+        $this->db->where('Unidades_ID', $id_unidad);
+        return $this->db->get()->result()[0]->suma_alumno;
+
+    }
+
+    public function insert_calificacion_alumno_unidad($data)
+    {
+        $this->db->insert('SS_Calificacion_unidad', $data);
+
+    }
+
+    public function get_calificacion_unidad($id_materia, $id_unidad)
+    {
+        $this->db->select('*');
+        $this->db->from('SS_Calificacion_unidad');
+        $this->db->join('SS_Usuarios', 'SS_Usuarios.Usuario_ID = SS_Calificacion_unidad.Calificacion_Alumno_ID');
+        $this->db->join('SS_Unidades', 'SS_Unidades.Unidades_ID = SS_Calificacion_unidad.Calificacion_Unidad_ID');
+        $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
+        $this->db->where('Materia_ID', $id_materia);
+        $this->db->where('Unidades_ID', $id_unidad);
+
+        return $this->db->get();
+
+    }
+
+    public function get_lista_alumnos($id_materia)
+    {
+        $this->db->select('*');
+        $this->db->from('SS_Alumnos_Registrados');
+        $this->db->join('SS_Usuarios', 'SS_Alumnos_Registrados.Resgistro_AlumnoID = SS_Usuarios.Usuario_ID');
+        $this->db->join('SS_Materia', 'SS_Alumnos_Registrados.Resgistro_MateriaID = SS_Materia.Materia_ID');
+        $this->db->where('Materia_ID', $id_materia);
+        return $this->db->get();
+
+    }
+
+    public function get_unidades_materias($id_materia)
+    {
+        $this->db->select('*');
+        $this->db->from('SS_Materia');
+        $this->db->join('SS_Unidades', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
+        $this->db->where('Materia_ID', $id_materia);
+        return $this->db->get()->num_rows();
+
+    }
+
+    public function suma_unidades_materia_alumno($id_materia, $id_alumno)
+    {
+        $this->db->select('SUM(Calificacion_Calificacion) AS sumatotal');
+        $this->db->from('SS_Calificacion_unidad');
+        $this->db->join('SS_Unidades', 'SS_Unidades.Unidades_ID = SS_Calificacion_unidad.Calificacion_Unidad_ID');
+        $this->db->join('SS_Materia', 'SS_Unidades.Unidad_Materia_ID = SS_Materia.Materia_ID');
+        $this->db->join('SS_Usuarios', 'SS_Usuarios.Usuario_ID = SS_Calificacion_unidad.Calificacion_Alumno_ID');
+        $this->db->where('Usuario_ID', $id_alumno);
+        $this->db->where('Materia_ID', $id_materia);
+        return $this->db->get()->result()[0]->sumatotal;
+
+    }
+
+    public function set_calificacion_alumno($id_materia, $id_alumno, $calificacionfinal)
+    {
+        $data = array(
+            'Resgistro_Calificacion_Final' => $calificacionfinal,
+        );
+
+        $this->db->where('Resgistro_AlumnoID', $id_alumno);
+        $this->db->where('Resgistro_MateriaID', $id_materia);
+        $this->db->update('SS_Alumnos_Registrados', $data);
+
+    }
+
 }
